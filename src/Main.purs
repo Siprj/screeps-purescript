@@ -1,12 +1,13 @@
 module Main where
 
-import Prelude ((>>=), ($), Unit, show)
+import Prelude((>>=), (<<<), ($), Unit, show, map, pure, unit)
 
-import Control.Monad.Eff (Eff)
-import Control.Monad.Eff.Console (CONSOLE, log)
+import Data.StrMap (keys)
+import Control.Monad.Eff(Eff)
+import Control.Monad.Eff.Console(CONSOLE, log)
 
-import Screeps.Game (creeps)
-import Screeps
+import Screeps.FFI.Game(creeps, getGame, logCreeps)
+import Screeps.FFI.Types(Screeps)
 
-main :: forall e. Eff (console :: CONSOLE, tick :: TICK | e) Unit
-main = creeps >>= (\v -> log $ show v)
+main :: forall e. Eff (screeps :: Screeps, console :: CONSOLE | e) Unit
+main = (map (keys <<< creeps) getGame) >>= (log <<< show <<< map show)
