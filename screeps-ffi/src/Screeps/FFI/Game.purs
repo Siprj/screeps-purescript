@@ -8,7 +8,6 @@ import Screeps.FFI.Utils(unsafeField)
 import Screeps.FFI.Types
     ( Screeps
     , ConstructionSite
-    , Creep
     , Flags
     , WorldMap
     , Market
@@ -17,6 +16,7 @@ import Screeps.FFI.Types
     , Spawn
     , Structure
     )
+import Screeps.FFI.Creep (Creep)
 
 
 foreign import data Game :: Type
