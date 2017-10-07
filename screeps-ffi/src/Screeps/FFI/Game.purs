@@ -22,18 +22,18 @@ import Screeps.FFI.Creep (Creep)
 foreign import data Game :: Type
 
 type Gcl =
-    { level :: Int -- ^ The current level.
-    , progress :: Int -- ^ The current progress to the next level.
-    , progressTotal :: Int -- ^ The progress required to reach the next level.
+    { level :: Number -- ^ The current level.
+    , progress :: Number -- ^ The current progress to the next level.
+    , progressTotal :: Number -- ^ The progress required to reach the next level.
     }
 
 type Cpu =
-    { limit :: Int -- ^ Your assigned CPU limit for the current shard.
-    , tickLimit :: Int
+    { limit :: Number -- ^ Your assigned CPU limit for the current shard.
+    , tickLimit :: Number
     -- ^ An amount of available CPU time at the current game tick.
     -- Usually it is higher than limit.
-    , bucket :: Int -- ^ An amount of unused CPU accumulated in your bucket.
-    , shardLimits :: StrMap Int
+    , bucket :: Number -- ^ An amount of unused CPU accumulated in your bucket.
+    , shardLimits :: StrMap Number
     -- ^ An object with limits for each shard with shard names as keys. You can
     -- use `setShardLimits` method to re-assign them.
     }
@@ -90,7 +90,7 @@ spawns obj = unsafeField "spawns" obj
 structures :: Game -> StrMap Structure
 structures obj = unsafeField "structures" obj
 
-time :: Game -> Int
+time :: Game -> Number
 time obj = unsafeField "time" obj
 
 foreign import getUsedCpu :: forall eff. Eff (screeps :: Screeps | eff) Number
@@ -108,7 +108,7 @@ foreign import getUsedCpu :: forall eff. Eff (screeps :: Screeps | eff) Number
 foreign import setShardLimits
     :: forall eff
     . StrMap Int
-    -> Eff (screeps :: Screeps | eff) Int
+    -> Eff (screeps :: Screeps | eff) Number
 
 -- TODO: getObjectById
 
