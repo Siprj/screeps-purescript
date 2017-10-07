@@ -1,6 +1,6 @@
 module Screeps.FFI.Types where
 
-import Control.Monad.Eff(kind Effect)
+import Control.Monad.Eff (kind Effect)
 
 
 -- | Effect for all statefull screeps commands

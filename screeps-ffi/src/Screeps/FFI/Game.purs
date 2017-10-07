@@ -1,10 +1,10 @@
 module Screeps.FFI.Game where
 
-import Prelude(Unit)
-import Data.StrMap(StrMap)
-import Control.Monad.Eff(Eff, kind Effect)
+import Prelude (Unit)
+import Data.StrMap (StrMap)
+import Control.Monad.Eff (Eff, kind Effect)
 
-import Screeps.FFI.Utils(unsafeField)
+import Screeps.FFI.Utils (unsafeField)
 import Screeps.FFI.Types
     ( Screeps
     , ConstructionSite
@@ -101,7 +101,7 @@ foreign import getUsedCpu :: forall eff. Eff (screeps :: Screeps | eff) Number
 -- | Parameter is StrMap with keys as shard names and values as new cpu
 -- | limits pre shard.
 -- |
--- | Return:
+-- | Returns:
 -- |   * OK - The operation has been scheduled successfully.
 -- |   * ERR_BUSY - 12-hours cooldown period is not over yet.
 -- |   * ERR_INVALID_ARGS - The argument is not a valid shard limits object.
