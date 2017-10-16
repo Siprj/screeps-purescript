@@ -14,7 +14,7 @@ import Screeps.FFI.Types
     , Resources
     , Room
     , Spawn
-    , Structure
+    , GenericStructure
     )
 import Screeps.FFI.Creep (Creep)
 
@@ -87,7 +87,7 @@ shard obj = unsafeField "shard" obj
 spawns :: Game -> StrMap Spawn
 spawns obj = unsafeField "spawns" obj
 
-structures :: Game -> StrMap Structure
+structures :: Game -> StrMap GenericStructure
 structures obj = unsafeField "structures" obj
 
 time :: Game -> Number
@@ -118,7 +118,8 @@ foreign import setShardLimits
 -- | Simulation Room. Equivalent to `notifyLater str 0`.
 -- |
 -- | Message can contain up to 1000 characters.
-foreign import notify :: forall eff. String -> Eff (cmd :: Screeps | eff) Unit
+foreign import notify
+    :: forall eff. String -> Eff (screeps :: Screeps | eff) Unit
 
 -- | Same as `notify` but additionl parametar.
 -- |

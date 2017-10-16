@@ -1,25 +1,15 @@
 module Screeps.FFI.Creep where
 
 import Control.Monad.Eff (Eff, kind Effect)
+import Data.Identity (Identity(..))
 import Data.StrMap (StrMap)
+import Prelude (($))
 
-import Screeps.FFI.Constants
-    ( BodyPartConstant
-    , DirectionConstant
-    , ResourceConstant
-    )
+import Screeps.FFI.Constants (BodyPartConstant, DirectionConstant, ResourceConstant)
 import Screeps.FFI.RoomObject (class RoomObject)
 import Screeps.FFI.RoomPosition (RoomPosition)
-import Screeps.FFI.Types
-    ( class Structure2
-    , Controller
-    , Room
-    , ConstructionSite
-    , Mineral
-    , Path
-    , Screeps
-    , Source
-    )
+import Screeps.FFI.Structure (class Structure)
+import Screeps.FFI.Types (Controller, Room, ConstructionSite, Mineral, Path, Screeps, Source)
 import Screeps.FFI.Utils (NullOrUndefined, unsafeField, runThisEffFn1)
 
 
@@ -37,12 +27,12 @@ type Owner =
 
 foreign import data Creep :: Type
 
-instance creepRoomObject :: RoomObject Creep where
+instance creepRoomObject :: RoomObject Creep Identity where
     pos :: Creep -> RoomPosition
     pos obj = unsafeField "pos" obj
 
-    room :: Creep -> Room
-    room obj = unsafeField "obj" obj
+    room :: Creep -> Identity Room
+    room obj = Identity $ unsafeField "obj" obj
 
 body :: Creep -> Array BodyPart
 body obj = unsafeField "body" obj
@@ -117,8 +107,8 @@ ticksToLive obj = unsafeField "ticksToLive" obj
 -- |   * ERR_NOT_IN_RANGE - The target is too far away.
 -- |   * ERR_NO_BODYPART - There are no ATTACK body parts in this creep’s body.
 attackStructure
-    :: forall eff s
-    . Structure2 s
+    :: forall eff s a
+    . (Structure s a)
     => Creep
     -> s
     -> Eff (screeps :: Screeps | eff) Number
