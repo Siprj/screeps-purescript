@@ -13,8 +13,8 @@ class (RoomObject s a) <= Structure s a | s -> a where
     -- | The total amount of hit points of the structure.
     hitsMax :: s -> Number
 
-    -- | A unique object identificator. You can use Game.getObjectById method to
-    -- | retrieve an object instance by its id.
+    -- | A unique object identificator. You can use `Game.getObjectById` method
+    -- | to retrieve an object instance by its `id`.
     id :: s -> String
 
     -- | One of the STRUCTURE_* (structure) constants.
@@ -46,28 +46,32 @@ class (RoomObject s a) <= Structure s a | s -> a where
     -- |    * ERR_NOT_OWNER - You are not the owner of this structure.
     -- |    * ERR_INVALID_ARGS - Argument is not a boolean value.
     notifyWhenAttacked
-        :: forall eff. Boolean -> s -> Eff (screeps :: Screeps | eff) ReturnCode
+        :: forall eff. s -> Boolean -> Eff (screeps :: Screeps | eff) ReturnCode
 
 
 -- DEFAULT IMPLEMENTSTION
--- hits :: s -> Number
--- hits obj = unsafeField "hits" obj
+-- instance spawnStructure :: Structure Spawn Always where
+--     hits :: s -> Number
+--     hits obj = unsafeField "hits" obj
 --
--- hitsMax :: s -> Number
--- hitsMax obj = unsafeField "hitsMax" obj
+--     hitsMax :: s -> Number
+--     hitsMax obj = unsafeField "hitsMax" obj
 --
--- id :: s -> String
--- id obj = unsafeField "id" obj
+--     id :: s -> String
+--     id obj = unsafeField "id" obj
 --
--- structureType :: s -> StructureType
--- structureType obj = unsafeField "structureType" obj
+--     structureType :: s -> StructureType
+--     structureType obj = unsafeField "structureType" obj
 --
--- destroy :: forall eff. s -> Eff (screeps :: Screeps | eff) ReturnCode
--- destroy obj = runThisEffFn0 "destroy" obj
+--     destroy :: forall eff. s -> Eff (screeps :: Screeps | eff) ReturnCode
+--     destroy obj = runThisEffFn0 "destroy" obj
 --
--- isActive :: forall eff. s -> Eff (screeps :: Screeps | eff) Boolean
--- isActive obj = runThisEffFn0 "isActive" obj
+--     isActive :: forall eff. s -> Eff (screeps :: Screeps | eff) Boolean
+--     isActive obj = runThisEffFn0 "isActive" obj
 --
--- notifyWhenAttacked
---     :: forall eff. Boolean -> s -> Eff (screeps :: Screeps | eff) ReturnCode
--- notifyWhenAttacked obj = runThisEffFn1 "notifyWhenAttacked" obj
+--     notifyWhenAttacked
+--         :: forall eff
+--         . s
+--         -> Boolean
+--         -> Eff (screeps :: Screeps | eff) ReturnCode
+--     notifyWhenAttacked obj = runThisEffFn1 "notifyWhenAttacked" obj

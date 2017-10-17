@@ -1,22 +1,12 @@
 module Screeps.FFI.Game where
 
-import Prelude (Unit)
-import Data.StrMap (StrMap)
 import Control.Monad.Eff (Eff, kind Effect)
-
-import Screeps.FFI.Utils (unsafeField)
-import Screeps.FFI.Types
-    ( Screeps
-    , ConstructionSite
-    , Flags
-    , WorldMap
-    , Market
-    , Resources
-    , Room
-    , Spawn
-    , GenericStructure
-    )
+import Data.StrMap (StrMap)
+import Prelude (Unit)
 import Screeps.FFI.Creep (Creep)
+import Screeps.FFI.Structure.Spawn (Spawn)
+import Screeps.FFI.Types (Screeps, ConstructionSite, Flags, WorldMap, Market, Resources, Room, GenericStructure)
+import Screeps.FFI.Utils (unsafeField)
 
 
 foreign import data Game :: Type

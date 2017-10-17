@@ -1,16 +1,14 @@
 module Screeps.FFI.Creep where
 
 import Control.Monad.Eff (Eff, kind Effect)
-import Data.Identity (Identity(..))
 import Data.StrMap (StrMap)
-import Prelude (($))
-
 import Screeps.FFI.Constants (BodyPartConstant, DirectionConstant, ResourceConstant)
 import Screeps.FFI.RoomObject (class RoomObject)
 import Screeps.FFI.RoomPosition (RoomPosition)
 import Screeps.FFI.Structure (class Structure)
-import Screeps.FFI.Types (Controller, Room, ConstructionSite, Mineral, Path, Screeps, Source)
-import Screeps.FFI.Utils (NullOrUndefined, unsafeField, runThisEffFn1)
+import Screeps.FFI.Source (Source)
+import Screeps.FFI.Types (ConstructionSite, Controller, Mineral, Path, Room, Screeps, Owner)
+import Screeps.FFI.Utils (Always, NullOrUndefined, unsafeField, runThisEffFn1)
 
 
 type BodyPart =
@@ -21,18 +19,14 @@ type BodyPart =
     , hits :: Number -- ^ The remaining amount of hit points of this body part.
     }
 
-type Owner =
-    { username :: String -- ^ The name of the owner user.
-    }
-
 foreign import data Creep :: Type
 
-instance creepRoomObject :: RoomObject Creep Identity where
+instance creepRoomObject :: RoomObject Creep Always where
     pos :: Creep -> RoomPosition
     pos obj = unsafeField "pos" obj
 
-    room :: Creep -> Identity Room
-    room obj = Identity $ unsafeField "obj" obj
+    room :: Creep -> Always Room
+    room obj = unsafeField "obj" obj
 
 body :: Creep -> Array BodyPart
 body obj = unsafeField "body" obj

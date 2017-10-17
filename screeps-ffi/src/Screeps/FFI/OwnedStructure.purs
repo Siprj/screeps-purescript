@@ -1,11 +1,8 @@
 module Screeps.FFI.OwnedStructure where
 
 import Screeps.FFI.Structure (class Structure)
+import Screeps.FFI.Types (Owner)
 
-
-type Owner =
-    { username :: String
-    }
 
 class (Structure s a) <= OwnedStructure s a | s -> a where
     -- | Whether this is your own structure.
@@ -15,8 +12,9 @@ class (Structure s a) <= OwnedStructure s a | s -> a where
     owner :: s -> Owner
 
 -- DEFAULT IMPLEMENTSTION
--- my :: s -> Boolean
--- my obj = unsafeField "my" obj
+-- instance spawnOwnedStructure :: OwnedStructure Spawn Always where
+--     my :: Spawn -> Boolean
+--     my obj = unsafeField "my" obj
 --
--- owner :: s -> Owner
--- owner obj = unsafeField "owner" obj
+--     owner :: Spawn -> Owner
+--     owner obj = unsafeField "owner" obj
