@@ -1,7 +1,7 @@
 module Screeps.FFI.Utils where
 
 import Control.Monad.Eff (kind Effect, Eff)
-import Data.Maybe (Maybe, fromJust, isJust)
+import Data.Maybe (Maybe(..), fromJust, isJust)
 import Partial.Unsafe (unsafePartial)
 import Prelude (($))
 
@@ -43,3 +43,9 @@ selectMaybes obj = unsafePartial $ selectMaybesImpl isJust fromJust obj
 
 foreign import selectMaybesImpl
     :: forall a. (Maybe a -> Boolean) -> (Maybe a -> a) -> a -> JsObject
+
+foreign import nullOrUndefinedToMaybePrime
+    :: forall a r. r -> (a -> r) -> NullOrUndefined a -> r
+
+nullOrUndefinedToMaybe :: forall a. NullOrUndefined a -> Maybe a
+nullOrUndefinedToMaybe v = nullOrUndefinedToMaybePrime Nothing Just v
