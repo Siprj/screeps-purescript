@@ -35,8 +35,7 @@ type Shard =
     }
 
 foreign import getGame
-    :: forall eff
-    . Eff (screeps :: Screeps | eff) Game
+    :: forall eff. Eff (screeps :: Screeps | eff) Game
 
 -- | A hash containing all your construction sites with their id as hash keys.
 constructionSites :: Game -> StrMap ConstructionSite
@@ -96,9 +95,7 @@ foreign import getUsedCpu :: forall eff. Eff (screeps :: Screeps | eff) Number
 -- |   * ERR_BUSY - 12-hours cooldown period is not over yet.
 -- |   * ERR_INVALID_ARGS - The argument is not a valid shard limits object.
 foreign import setShardLimits
-    :: forall eff
-    . StrMap Int
-    -> Eff (screeps :: Screeps | eff) Number
+    :: forall eff. StrMap Int -> Eff (screeps :: Screeps | eff) Number
 
 -- TODO: getObjectById
 
@@ -117,12 +114,4 @@ foreign import notify
 -- | immediately. Otherwise, it will be grouped with other notifications and
 -- | mailed out later using the specified time in minutes.
 foreign import notifyLater
-    :: forall eff
-    . String
-    -> Int
-    -> Eff (screeps :: Screeps | eff) Unit
-
-foreign import logCreeps
-    ::  forall eff
-    . StrMap Creep
-    -> Eff (screeps :: Screeps | eff) Unit
+    :: forall eff. String -> Int -> Eff (screeps :: Screeps | eff) Unit

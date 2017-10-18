@@ -14,12 +14,6 @@ exports.setShardLimits = function(limits) {
     }
 }
 
-exports.logCreeps = function(crees) {
-    return function() {
-        return console.log(crees);
-    }
-}
-
 exports.notify = function(msg) {
     return function() {
         return Game.notify(msg);
