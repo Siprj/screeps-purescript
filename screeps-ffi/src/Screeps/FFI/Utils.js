@@ -63,3 +63,15 @@ exports.selectMaybesImpl = function(isJust){
         }
     }
 }
+
+exports.nullOrUndefinedToMaybePrime = function(Nothing) {
+    return function(Just) {
+        return function(obj) {
+            if (obj === undefined || obj === null) {
+                return Nothing
+            } else {
+                return Just(obj);
+            }
+        }
+    }
+}
