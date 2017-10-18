@@ -50,12 +50,12 @@ exports.runThisEffFn3 = function(key) {
     }
 }
 
-exports.selectMaybesImpl = function(isJust){
-    return function(fromJust){
-        return function(obj){
+exports.selectMaybesImpl = function(isJust) {
+    return function(fromJust) {
+        return function(obj) {
             var newObj = {};
-            for(var key in obj){
-                if(obj.hasOwnProperty(key) && isJust(obj[key])){
+            for(var key in obj) {
+                if(obj.hasOwnProperty(key) && isJust(obj[key])) {
                     newObj[key] = fromJust(obj[key]);
                 }
             }
