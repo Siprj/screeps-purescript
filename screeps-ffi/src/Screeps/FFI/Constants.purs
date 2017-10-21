@@ -3,7 +3,7 @@ module Screeps.FFI.Constants where
 import Data.StrMap (StrMap)
 
 
-newtype ReturnCode = ReturnCode Number
+newtype ReturnCode = ReturnCode Int
 
 foreign import ok :: ReturnCode
 foreign import errNotOwner :: ReturnCode
@@ -23,12 +23,15 @@ foreign import errNotEnoughExtensions :: ReturnCode
 foreign import errRclNotEnough :: ReturnCode
 foreign import errGclNotEnough :: ReturnCode
 
-newtype FindConstant = FindConstant Number
+newtype ExitDirection = ExitDirection Int
 
-foreign import findExitTop :: FindConstant
-foreign import findExitRight :: FindConstant
-foreign import findExitBottom :: FindConstant
-foreign import findExitLeft :: FindConstant
+foreign import findExitTop :: ExitDirection
+foreign import findExitRight :: ExitDirection
+foreign import findExitBottom :: ExitDirection
+foreign import findExitLeft :: ExitDirection
+
+newtype FindConstant = FindConstant Int
+
 foreign import findExit :: FindConstant
 foreign import findCreeps :: FindConstant
 foreign import findMyCreeps :: FindConstant
@@ -49,7 +52,7 @@ foreign import findHostileConstructionSites :: FindConstant
 foreign import findMinerals :: FindConstant
 foreign import findNukes :: FindConstant
 
-newtype DirectionConstant = DirectionConstant Number
+newtype DirectionConstant = DirectionConstant Int
 
 foreign import top :: DirectionConstant
 foreign import topRight :: DirectionConstant

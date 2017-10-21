@@ -9,7 +9,7 @@ import Screeps.FFI.OwnedStructure (class OwnedStructure)
 import Screeps.FFI.RoomObject (class RoomObject)
 import Screeps.FFI.RoomPosition (RoomPosition)
 import Screeps.FFI.Structure (class Structure)
-import Screeps.FFI.Types (Memory, Owner, Room, Screeps)
+import Screeps.FFI.Types (Owner, Room, Screeps)
 import Screeps.FFI.Utils (Always, JsObject, NullOrUndefined, runThisEffFn0, runThisEffFn1, runThisEffFn2, runThisEffFn3, selectMaybes, unsafeField)
 
 
@@ -106,15 +106,15 @@ spawnCreep
     -> Eff (screeps :: Screeps | eff) ReturnCode
 spawnCreep obj a b = runThisEffFn2 "spawnCreep" obj a b
 
-type SpawnOpt =
-    { memory :: Maybe Memory
+type SpawnOpt a =
+    { memory :: Maybe a
     -- ^ Memory of the new creep. If provided, it will be immediately stored
     -- into Memory.creeps[name].
     , energyStructures :: Maybe String
-    -- Array of spawns/extensions from which to draw energy for the spawning
+    -- ^ Array of spawns/extensions from which to draw energy for the spawning
     -- process. Structures will be used according to the array order.
     , dryRun :: Maybe Boolean
-    -- If dryRun is true, the operation will only check if it is possible to
+    -- ^ If dryRun is true, the operation will only check if it is possible to
     -- create a creep.
     }
 
@@ -135,11 +135,11 @@ type SpawnOpt =
 -- |     * ERR_RCL_NOT_ENOUGH - Your Room Controller level is insufficient to
 -- |       use this spawn.
 spawnCreepOpt
-    :: forall eff
+    :: forall eff a
     . Spawn
     -> Array BodyPartConstant
     -> String
-    -> SpawnOpt
+    -> SpawnOpt a
     -> Eff (screeps :: Screeps | eff) ReturnCode
 spawnCreepOpt obj a b c = spawnCreepOpt' obj a b $ selectMaybes c
 

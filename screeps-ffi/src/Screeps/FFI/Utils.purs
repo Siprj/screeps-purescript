@@ -36,6 +36,27 @@ foreign import runThisEffFn3
     -> c
     -> Eff eff r
 
+foreign import runThisEffFn4
+    :: forall eff this a b c d r
+    . String
+    -> this
+    -> a
+    -> b
+    -> c
+    -> d
+    -> Eff eff r
+
+foreign import runThisEffFn5
+    :: forall eff this a b c d e r
+    . String
+    -> this
+    -> a
+    -> b
+    -> c
+    -> d
+    -> e
+    -> Eff eff r
+
 foreign import data JsObject :: Type
 
 selectMaybes :: forall a. a -> JsObject

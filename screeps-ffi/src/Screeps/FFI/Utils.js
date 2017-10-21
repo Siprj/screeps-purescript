@@ -50,6 +50,40 @@ exports.runThisEffFn3 = function(key) {
     }
 }
 
+exports.runThisEffFn4 = function(key) {
+    return function(self) {
+        return function(a) {
+            return function(b) {
+                return function(c) {
+                    return function(d) {
+                        return function() {
+                            return self[key](a, b, c, d);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+exports.runThisEffFn5 = function(key) {
+    return function(self) {
+        return function(a) {
+            return function(b) {
+                return function(c) {
+                    return function(d) {
+                        return function(e) {
+                            return function() {
+                                return self[key](a, b, c, d, e);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 exports.selectMaybesImpl = function(isJust) {
     return function(fromJust) {
         return function(obj) {

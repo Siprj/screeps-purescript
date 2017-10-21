@@ -2,7 +2,7 @@
 
 exports.getMemory = Memory;
 
-exports.getMemorySegmentPrime = function(ptr) {
+exports.getMemorySegment = function(ptr) {
     return function(key) {
         return function() {
             return ptr[key];
@@ -10,12 +10,20 @@ exports.getMemorySegmentPrime = function(ptr) {
     }
 }
 
-exports.setMemorySegmentPrime = function(ptr) {
+exports.setMemorySegment = function(ptr) {
     return function(key) {
         return function(obj) {
             return function() {
                 return ptr[key] = obj;
             }
+        }
+    }
+}
+
+exports.deleteMemorySegment = function(ptr) {
+    return function(key) {
+        return function() {
+            delete ptr[key];
         }
     }
 }
