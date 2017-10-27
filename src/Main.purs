@@ -55,9 +55,10 @@ type HarvesterMemory = {
 main :: forall e. Eff (screeps :: Screeps, console :: CONSOLE | e) Unit
 main = do
     g <- getGame
+    log "trying to create new hv"
     when (shouldSpawnHarvester g) $ maybe (pure unit) (\s -> void $ spawnCreepOpt s body ("hv" <> show (time g)) harvOpts) $ head $ values $ spawns g
+    log "trying to create new up"
     when (shouldSpawnUpgrader g) $ maybe (pure unit) (\s -> void $ spawnCreepOpt s body ("up" <> show (time g)) upgrOpts) $ head $ values $ spawns g
-    traverse_
   where
     shouldSpawnHarvester :: Game -> Boolean
     shouldSpawnHarvester g = 2 > (size $ filterHarvesters "harvester" $ creeps g)
@@ -80,6 +81,3 @@ main = do
         , energyStructures: Nothing
         , dryRun: Nothing
         }
-
-    harvesterActions
-    upgraderActions
