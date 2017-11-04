@@ -7,10 +7,11 @@ import Control.Lens hiding ((.=))
 import Control.Monad
 import Data.Aeson
 import Data.Aeson.Types
-import qualified Data.ByteString.Char8 as BS
 import Data.Monoid
 import Data.Text hiding (find)
 import Network.Wreq
+import Options.Applicative as Opt
+import qualified Data.ByteString.Char8 as BS
 import System.Directory
 import System.Environment
 import System.FilePath
@@ -18,23 +19,43 @@ import System.FilePath.Find
 import System.IO
 
 
--- Configuration
-artefactDirectory = "dist" </> "out"
-dstBranch = "default"
+data Arguments = Arguments
+    { artefactDirectory :: FilePath
+    , dstBranch :: Text
+    }
+
+optionsParser :: Opt.Parser Arguments
+optionsParser = Arguments
+    <$> Opt.strOption
+        ( Opt.long "artefactDirectory"
+        <> Opt.short 'f'
+        <> Opt.metavar "FILENAME"
+        )
+
+    <*> fmap pack (Opt.strOption
+        ( Opt.long "branch"
+        <> Opt.short 'b'
+        <> Opt.metavar "BRANCH"
+        ))
 
 main :: IO ()
 main = do
-    print $ "Branch: " <> dstBranch
+    Arguments{..} <- Opt.execParser opts
     curDir <- getCurrentDirectory
     (userName, password) <- getUserNameAndPassword
     jss <- findJs $ curDir </> artefactDirectory
     modules <- mapM (fileToModule $ curDir </> artefactDirectory) jss
     sendPost userName password $ SourcePushReq dstBranch modules
+  where
+    opts = Opt.info (optionsParser <**> Opt.helper)
+        ( Opt.fullDesc
+        <> Opt.progDesc "Publish artefact to screeps server."
+        )
 
 sendPost :: String -> String -> SourcePushReq -> IO ()
 sendPost user pass reqData = do
     let opts = defaults & auth ?~ basicAuth (BS.pack user) (BS.pack pass)
-    void . postWith opts "https://screeps.com/api/user/code" $ toJSON reqData
+    void $ postWith opts "https://screeps.com/api/user/code" $ toJSON reqData
 
 getUserNameAndPassword :: IO (String, String)
 getUserNameAndPassword = do
