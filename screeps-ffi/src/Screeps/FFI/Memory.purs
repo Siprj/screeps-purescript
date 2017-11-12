@@ -6,9 +6,7 @@ import Prelude (Unit)
 import Screeps.FFI.Types (Screeps)
 
 
-foreign import data Memory :: Type
-
-foreign import getMemory :: Memory
+foreign import getMemory :: forall a. a
 
 foreign import getMemorySegment
     :: forall eff val this. this -> String -> Eff (screeps :: Screeps | eff) val

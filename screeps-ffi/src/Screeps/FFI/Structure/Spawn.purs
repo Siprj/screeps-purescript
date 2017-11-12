@@ -2,7 +2,7 @@ module Screeps.FFI.Structure.Spawn where
 
 import Control.Monad.Eff (Eff)
 import Data.Maybe (Maybe)
-import Prelude (($))
+import Prelude (class Show, ($), (<>))
 import Screeps.FFI.Constants (BodyPartConstant, ReturnCode, StructureType)
 import Screeps.FFI.Creep (Creep)
 import Screeps.FFI.OwnedStructure (class OwnedStructure)
@@ -14,6 +14,10 @@ import Screeps.FFI.Utils (Always, JsObject, NullOrUndefined, runThisEffFn0, runT
 
 
 foreign import data Spawn :: Type
+
+instance showSpawn :: Show Spawn where
+    show :: Spawn -> String
+    show v = "Spawn{ name:, " <> name v <> " }"
 
 instance spawnRoomObject :: RoomObject Spawn Always where
     pos :: Spawn -> RoomPosition

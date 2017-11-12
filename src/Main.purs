@@ -3,14 +3,14 @@ module Main where
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log)
 import Control.Monad.Eff.Unsafe (unsafePerformEff)
-import Data.Array (head)
+import Data.Array (foldl, head)
 import Data.Foldable (traverse_)
-import Data.Generic (class Generic, gShow)
 import Data.Maybe (Maybe(..), maybe)
 import Data.StrMap (StrMap, filter, keys, size, values)
+import Data.Tuple (Tuple(..), fst, snd)
 import Prelude (class Show, Unit(..), bind, discard, map, pure, show, unit, void, when, ($), (+), (<<<), (<>), (==), (>), (>>=))
 import Screeps.FFI.Constants (carry, move, work)
-import Screeps.FFI.Creep (Creep)
+import Screeps.FFI.Creep (Creep, memory)
 import Screeps.FFI.Game (Game, creeps, getGame, spawns, time)
 import Screeps.FFI.Memory (getMemory, setMemorySegment, getMemorySegment)
 import Screeps.FFI.Structure.Spawn (SpawnOpt, spawnCreep, spawnCreepOpt)
@@ -40,13 +40,11 @@ creepGetMemory :: forall eff val
     -> Eff (screeps :: Screeps | eff) val
 creepGetMemory creep field = getMemorySegment creep field
 
-filterHarvesters :: String -> StrMap Creep -> StrMap Creep
-filterHarvesters name creeps' = filter checkHarvester creeps'
+filterByRole :: String -> StrMap Creep -> StrMap Creep
+filterByRole name creeps' = filter checkHarvester creeps'
   where
     checkHarvester :: Creep -> Boolean
-    checkHarvester a = unsafePerformEff $ do
-        v <- creepGetMemory a "role"
-        pure $ maybe false ((==) name) $ nullOrUndefinedToMaybe v
+    checkHarvester a = (memory a).role == name
 
 type HarvesterMemory = {
     role :: String
@@ -56,15 +54,20 @@ main :: forall e. Eff (screeps :: Screeps, console :: CONSOLE | e) Unit
 main = do
     g <- getGame
     log "trying to create new hv"
-    when (shouldSpawnHarvester g) $ maybe (pure unit) (\s -> void $ spawnCreepOpt s body ("hv" <> show (time g)) harvOpts) $ head $ values $ spawns g
+    log <<< show <<< head <<< values $ spawns g
+    when (shouldSpawnHarvester g) $ maybe (pure unit) (\s -> void $ spawnCreepOpt s body ("hv" <> show (time g)) harvOpts) <<< head <<< values $ spawns g
     log "trying to create new up"
     when (shouldSpawnUpgrader g) $ maybe (pure unit) (\s -> void $ spawnCreepOpt s body ("up" <> show (time g)) upgrOpts) $ head $ values $ spawns g
+    log $ show $ getHarvestersAndUpgraders $ creeps g
+    log <<< show $ size $ filterByRole "harvester" $ creeps g
+    log <<< show $ size $ filterByRole "upgrader" $ creeps g
+
   where
     shouldSpawnHarvester :: Game -> Boolean
-    shouldSpawnHarvester g = 2 > (size $ filterHarvesters "harvester" $ creeps g)
+    shouldSpawnHarvester g = 2 > (size $ filterByRole "harvester" $ creeps g)
 
     shouldSpawnUpgrader :: Game -> Boolean
-    shouldSpawnUpgrader g = 2 > (size $ filterHarvesters "harvester" $ creeps g)
+    shouldSpawnUpgrader g = 2 > (size $ filterByRole "upgrader" $ creeps g)
 
     body = [work, carry, move, move]
 
@@ -81,3 +84,13 @@ main = do
         , energyStructures: Nothing
         , dryRun: Nothing
         }
+
+    getHarvestersAndUpgraders :: StrMap Creep -> Tuple (Array Creep) (Array Creep)
+    getHarvestersAndUpgraders screeps' = foldl filter (Tuple [] []) screeps'
+      where
+        filter :: Tuple (Array Creep) (Array Creep) -> Creep -> Tuple (Array Creep) (Array Creep)
+        filter acc val =
+            case (memory val).role of
+                "harvester" -> Tuple ([val] <> fst acc) (snd acc)
+                "upgrader" -> Tuple (fst acc) ([val] <> snd acc)
+                _ -> acc

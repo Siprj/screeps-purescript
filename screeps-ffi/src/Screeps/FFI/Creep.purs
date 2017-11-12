@@ -2,11 +2,12 @@ module Screeps.FFI.Creep where
 
 import Control.Monad.Eff (Eff, kind Effect)
 import Data.StrMap (StrMap)
+import Prelude (class Show, (<>))
 import Screeps.FFI.Constants (BodyPartConstant, DirectionConstant, ResourceConstant)
 import Screeps.FFI.RoomObject (class RoomObject)
 import Screeps.FFI.RoomPosition (RoomPosition)
-import Screeps.FFI.Structure (class Structure)
 import Screeps.FFI.Source (Source)
+import Screeps.FFI.Structure (class Structure)
 import Screeps.FFI.Types (ConstructionSite, Controller, Mineral, Path, Room, Screeps, Owner)
 import Screeps.FFI.Utils (Always, NullOrUndefined, unsafeField, runThisEffFn1)
 
@@ -20,6 +21,10 @@ type BodyPart =
     }
 
 foreign import data Creep :: Type
+
+instance showCreep :: Show Creep where
+    show :: Creep -> String
+    show v = "Creep{ name: " <> name v <> "}"
 
 instance creepRoomObject :: RoomObject Creep Always where
     pos :: Creep -> RoomPosition
@@ -59,7 +64,9 @@ hitsMax obj = unsafeField "fatigue" obj
 id :: Creep -> String
 id obj = unsafeField "id" obj
 
--- TODO: memry management
+-- TODO: memory set
+memory :: forall a. Creep -> a
+memory obj = unsafeField "memory" obj
 
 -- | Whether it is your creep or foe.
 my :: Creep -> Boolean
