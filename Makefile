@@ -1,6 +1,10 @@
 .PHONY: all publish
 
-all:
+.DEFAULT_GOAL := build
+
+all: build publish
+
+build:
 	mkdir -p out/
 	rm -R bower_components/purescript-screeps-ffi
 	bower install
